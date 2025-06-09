@@ -1,0 +1,110 @@
+# genshin.dev API
+
+<a href="https://discord.gg/M8t9nFG"><img src="https://img.shields.io/discord/763148972435963934?logo=discord" alt="chat on Discord"></a>
+
+An API that serves data for the game Genshin Impact by miHoYo (the game is made by miHoYo, not the API).
+
+**An always up-to-date version is hosted at https://genshin.jmp.blue!**
+
+## Usage
+
+This API offers various endpoints for retrieving data on in game objects.
+Please note that this API does **NOT** interact with your game!.
+This API only provides static data.
+
+### Endpoints Overview
+
+> **:information_source: Notice:** Please replace `<baseUrl>` with the endpoint you are trying to access.
+
+| Endpoint                | Description                                                   | Example Usage (bash)                       |
+| ----------------------- | ------------------------------------------------------------- | ------------------------------------------ |
+| `/`                     | Returns a list of available entity types.                     | `curl <baseUrl>/`                          |
+| `/:type`                | Returns a list of available entities for a specific type.     | `curl <baseUrl>/characters`                |
+| `/:type/all`            | Returns detailed information about all entities of a type.    | `curl <baseUrl>/characters/all?lang=en`    |
+| `/:type/:id`            | Returns detailed information about a single entity.           | `curl <baseUrl>/characters/albedo?lang=en` |
+| `/:type/:id/list`       | Returns a list of available images for a specific entity.     | `curl <baseUrl>/characters/albedo/list`    |
+| `/:type/:id/:imageType` | Returns the image of a specific type for a particular entity. | `curl <baseUrl>/characters/albedo/card`    |
+
+> **:information_source: Notice:** You can provide an optional `lang` query parameter to localize the responses.
+> Not all data might be included in all languages!
+
+## Planned Features
+
+- Entity relationships (e.g. characters linking to the best weapon for them)
+- Web UI to make adding data even more simple
+
+## Prerequisites
+
+- [Node.js](https://nodejs.org/): ^16.0.0
+- [PNPM](https://pnpm.io/)
+
+## Installation
+
+Install packages with pnpm:
+
+```
+pnpm install
+```
+
+If you want to have the API running on a different port, rename the `.env.example` into `.env` and change the `API_PORT` field to your preferred port. \
+Depending on if you want to install the API for production or for development, the process is different.
+
+### Production
+
+Build the project using the following command:
+
+```
+npm run build
+```
+
+Then start the server with this command:
+
+```
+node .
+```
+
+### Development
+
+Watch the project's files via the following command:
+
+```
+npm run watch
+```
+
+Then start the dev server with this command:
+
+```
+npm run dev
+```
+
+## Contributing
+
+[![GitHub repo Good Issues for newbies](https://img.shields.io/github/issues/genshindev/api/good%20first%20issue?style=flat&logo=github&logoColor=green&label=Good%20First%20issues)](https://github.com/genshindev/api/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22) [![GitHub Help Wanted issues](https://img.shields.io/github/issues/genshindev/api/help%20wanted?style=flat&logo=github&logoColor=b545d1&label=%22Help%20Wanted%22%20issues)](https://github.com/genshindev/api/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22) [![GitHub Help Wanted PRs](https://img.shields.io/github/issues-pr/genshindev/api/help%20wanted?style=flat&logo=github&logoColor=b545d1&label=%22Help%20Wanted%22%20PRs)](https://github.com/genshindev/api/pulls?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22) [![GitHub repo Issues](https://img.shields.io/github/issues/genshindev/api?style=flat&logo=github&logoColor=red&label=Issues)](https://github.com/genshindev/api/issues?q=is%3Aopen)
+
+Contributing is pretty simple if you want to just add new characters, nations, new entity types, translations etc, which will be explained in the following sections. \
+Then simply [create a new Pull Request](https://github.com/genshindev/api/pulls) with your changes and we will have a look at it as soon as we have time!
+
+### Adding a new entity to an existing type
+
+For adding a new entity to an already existing entity type, simply add a new folder in the `assets/data/{entityType}` folder with `{entityType}` being replaced with the name of the entity you want to add in all-lowercase and each white-space replaced with a `-`, e.g. `Knights of Favonius` becomes `knights-of-favonius`. \
+Then create a `en.json` file which contains all the basic data of the entity you're adding, preferably with the same field names that other entities with the same entity type have. \
+
+### Adding a new entity type
+
+Adding a new entity type is very, very simple. All you need to do is create a new folder in the `assets/data` directory, e.g. `nations`. The name of the folder should be in all-lowercase and have each white-space replaced with a `-`, e.g. `Cooking Ingredients` becomes `cooking-ingredients`. \
+Then simply add new entities to your new entity type as described in [Adding a new entity to an existing type](#Adding-a-new-entity-to-an-existing-type).
+
+### Adding entity translations
+
+Adding translations to an already existing entity is as trivial as adding a new file with the name `{countryCode}.json` with `{countryCode}` being replaced with the country code of the language you want to add, e.g. if you wanted to add French it would be `fr`. \
+Then simply add overrides for the data that's present on the `en.json` with the translated content. \
+**Note that it is preferred if you use official translations over your own translations where possible.**
+
+### Adding images to an entity
+
+For entities like characters, images are being served from `assets/images/{entityType}/{entityId}`. These images can be in any image format (`heic, heif, jpeg, jpg, png, raw, tiff, webp, gif`), but have their extension stripped, e.g. `icon.webp` becomes `icon`. \
+Then simply add the file to the `assets/images/{entityType}/{entityId}` folder or create it if it doesn't already exist.
+
+### License
+
+Licensed under Open Software License v3.0
